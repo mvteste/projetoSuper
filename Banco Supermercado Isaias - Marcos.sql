@@ -1,0 +1,12 @@
+CREATE DATABASE SuperMercado;
+
+CREATE TABLE Usuario (
+id_usuario INT PRIMARY KEY AUTO_INCREMENT,
+nome VARCHAR(100),
+cpf VARCHAR(14),
+telefone VARCHAR(20),
+email VARCHAR(50),
+endereço VARCHAR(100),
+data_cadastro DATETIME DEFAULT CURRENT_TIMESTAMP,
+situacao BOOLEAN
+);
