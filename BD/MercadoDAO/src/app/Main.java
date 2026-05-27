@@ -4,6 +4,9 @@
  */
 package app;
 
+import dao.Conexao;
+import java.sql.Connection;
+
 /**
  *
  * @author Emanuel
@@ -14,7 +17,16 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        try {
+            Connection conn = Conexao.conectar();
+
+            if (conn != null) {
+                System.out.println("Conectado com sucesso!");
+            }
+
+        } catch (Exception e) {
+            System.out.println("Erro: " + e.getMessage());
+        }
     }
     
 }

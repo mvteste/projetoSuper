@@ -19,7 +19,7 @@ public class Conexao {
     //localhost -> servidor do banco
     
 //escola -> nome do banco
-    private static final String URL = "jdbc:mysql://localhost:3306/sistema";
+    private static final String URL = "jdbc:mysql://localhost:3306/mercadodao";
     
  //usuario do banco
     private static final String USER = "root";
