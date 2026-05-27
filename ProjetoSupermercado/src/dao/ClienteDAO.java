@@ -1,4 +1,3 @@
-
 package dao;
 
 import model.Cliente;
@@ -30,9 +29,7 @@ public class ClienteDAO {
                 c.setCep(rs.getString("cep"));
                 
                 lista.add(c);
-            
-            
-            
+             
             }
             
             rs.close();

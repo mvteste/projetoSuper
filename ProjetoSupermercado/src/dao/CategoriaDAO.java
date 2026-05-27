@@ -1,4 +1,3 @@
-
 package dao;
 
 import model.Categoria;
@@ -36,16 +35,10 @@ public class CategoriaDAO {
         stmt.close();
         conn.close();
 
-       
-       
-           
-       
-       
        }catch(Exception e){
         e.printStackTrace();
     
     }
-    
     
     return listar();
 
@@ -102,18 +95,9 @@ public class CategoriaDAO {
             stmt.execute();
             
             
-        
-        
-        
         }catch(Exception e){
             e.printStackTrace();
         
         }
-    
-    
-    
-    }
-    
-    
-    
+    }   
 }

@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package dao;
 
 import model.Produto;
@@ -27,12 +24,7 @@ public class ProdutoDAO {
                 
                 Produto p = new Produto();
                 
-                
-            
-            
             }
-        
-        
         
         }catch(Exception e){
             e.printStackTrace();
@@ -42,9 +34,5 @@ public class ProdutoDAO {
     
     
         return null;
-        
-    
-    
-    }
-    
+    } 
 }
