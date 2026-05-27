@@ -229,6 +229,26 @@ CREATE TABLE item_vendas (
         REFERENCES produtos(id)
 );
 
+CREATE TABLE pedido_compra (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    
+    fornecedor_id INT NOT NULL,
+    funcionarios_id INT NOT NULL,
+    
+    data_pedido DATE NOT NULL,
+    data_entrega DATE,
+    
+    valor_total DECIMAL(10,2),
+    
+    status VARCHAR(45),
+    
+    FOREIGN KEY (fornecedor_id)
+        REFERENCES fornecedor(id),
+        
+    FOREIGN KEY (funcionarios_id)
+        REFERENCES funcionarios(id)
+);
+
 -- =====================================================
 -- TABELA: CONTAS A RECEBER
 -- =====================================================

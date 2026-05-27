@@ -1,11 +1,11 @@
-package Supermercado;
+package dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLDataException;
 import java.sql.SQLException;
 
-public class ConexaoBanco {
+public class Conexao {
         //URL de conexão com o banco
         //jdbc:mysql -> protocolo JDBC para MySQL
         //localhost -> servidor do banco
