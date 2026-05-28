@@ -1,44 +1,53 @@
 package model;
 
+import java.util.Date;
 
 public class ContasReceber {
     
     private int id;
-    private int id_item_venda;
+    private String nome;
+    private float valor;
+    private Date data_recebimento;
+    private String status;
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getId_item_venda() {
-        return id_item_venda;
-    }
-
-    public void setId_item_venda(int id_item_venda) {
-        this.id_item_venda = id_item_venda;
+    public String getNome() {
+        return nome;
     }
 
     public float getValor() {
         return valor;
     }
 
+    public Date getData_recebimento() {
+        return data_recebimento;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
     public void setValor(float valor) {
         this.valor = valor;
     }
 
-    public String getData_vencimento() {
-        return data_vencimento;
+    public void setData_recebimento(Date data_recebimento) {
+        this.data_recebimento = data_recebimento;
     }
 
-    public void setData_vencimento(String data_vencimento) {
-        this.data_vencimento = data_vencimento;
+    public void setStatus(String status) {
+        this.status = status;
     }
-    private float valor;
-    private String data_vencimento;
-    
-    
+  
 }

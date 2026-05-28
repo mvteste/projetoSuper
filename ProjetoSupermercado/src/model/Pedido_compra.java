@@ -1,9 +1,11 @@
+
 package model;
 
 import java.util.Date;
 
 
-public class Pedido {
+public class Pedido_compra {
+   
     private int id;
     private int fornecedor_id;
     private int funcionarios_id;
@@ -67,5 +69,5 @@ public class Pedido {
     public void setStatus(String status) {
         this.status = status;
     }
-     
+   
 }

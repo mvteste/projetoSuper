@@ -1,41 +1,61 @@
 package model;
 
+import java.util.Date;
+
 public class Cliente {
     private int id;
     private String nome;
-    private String cidade;
-    private String cep;
+    private Date data;
+    private String cpf;
+    private String endereco;
+    private String telefone;
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getNome() {
         return nome;
     }
 
+    public Date getData() {
+        return data;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
 
-    public String getCidade() {
-        return cidade;
+    public void setData(Date data) {
+        this.data = data;
     }
 
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
-    public String getCep() {
-        return cep;
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
     }
 
-    public void setCep(String cep) {
-        this.cep = cep;
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
     
 }

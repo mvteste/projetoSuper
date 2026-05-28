@@ -3,42 +3,49 @@ package model;
 public class ItemVenda {
    
     private int id;
-    private int id_produto;
-    private int id_venda;
+    private int vendas_id;
+    private int quantidade;
+    private float valor_unitario;
+    private float subtotal;
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getId_produto() {
-        return id_produto;
-    }
-
-    public void setId_produto(int id_produto) {
-        this.id_produto = id_produto;
-    }
-
-    public int getId_venda() {
-        return id_venda;
-    }
-
-    public void setId_venda(int id_venda) {
-        this.id_venda = id_venda;
+    public int getVendas_id() {
+        return vendas_id;
     }
 
     public int getQuantidade() {
         return quantidade;
     }
 
+    public float getValor_unitario() {
+        return valor_unitario;
+    }
+
+    public float getSubtotal() {
+        return subtotal;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setVendas_id(int vendas_id) {
+        this.vendas_id = vendas_id;
+    }
+
     public void setQuantidade(int quantidade) {
         this.quantidade = quantidade;
     }
-    private int quantidade;
-    
-    
-    
+
+    public void setValor_unitario(float valor_unitario) {
+        this.valor_unitario = valor_unitario;
+    }
+
+    public void setSubtotal(float subtotal) {
+        this.subtotal = subtotal;
+    }
+   
 }

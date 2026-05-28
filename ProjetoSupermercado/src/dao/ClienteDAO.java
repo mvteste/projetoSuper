@@ -24,9 +24,7 @@ public class ClienteDAO {
                 Cliente c = new Cliente();
                 
                 c.setId(rs.getInt("id"));
-                c.setCidade(rs.getString("cidade"));
                 c.setNome(rs.getString("nome"));
-                c.setCep(rs.getString("cep"));
                 
                 lista.add(c);
              
@@ -55,8 +53,7 @@ public class ClienteDAO {
             PreparedStatement stmt = conn.prepareStatement(sql);
             
             stmt.setString(1, c.getNome());
-            stmt.setString(2, c.getCidade());
-            stmt.setString(3, c.getCep());
+          
             
             stmt.execute();
                                
