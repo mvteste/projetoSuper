@@ -5,7 +5,10 @@
 package app;
 
 import dao.Conexao;
+import dao.FornecedorDAO;
 import java.sql.Connection;
+import java.util.Scanner;
+import model.Fornecedor;
 
 /**
  *
@@ -16,7 +19,22 @@ public class Main {
     /**
      * @param args the command line arguments
      */
+    
     public static void main(String[] args) {
+            
+    Scanner sc = new Scanner(System.in);
+    FornecedorDAO dao = new FornecedorDAO();
+            
+        int op;
+            
+        do{
+            System.out.println("1 - Teste conexao BD | 2 - Inserir Fornecedor | 0 - Sair");
+            op = sc.nextInt();
+            
+            if (op == 1) {
+            
+        
+
         try {
             Connection conn = Conexao.conectar();
 
@@ -26,7 +44,37 @@ public class Main {
 
         } catch (Exception e) {
             System.out.println("Erro: " + e.getMessage());
+            
+        
+                }
+            }
+                
+            if(op == 2){
+                Fornecedor f = new Fornecedor();
+                sc.nextLine(); // limpar buffer
+
+                System.out.println("Nome: ");
+                f.setNome(sc.nextLine());
+                sc.nextLine();
+
+                System.out.println("CNPJ: ");
+                f.setCnpj(sc.nextLine());
+
+                System.out.println("Email: ");
+               f.setEmail(sc.nextLine()); 
+                        
+                System.out.println("Endereco: ");
+                f.setEndereco(sc.nextLine());
+
+                dao.inserir(f);
+            }else{
+                System.out.println("Escolha uma opção");
+            }
+
+            }while (op != 0);
+          }
         }
-    }
     
-}
+
+    
+
