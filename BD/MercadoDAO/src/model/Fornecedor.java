@@ -9,11 +9,20 @@ package model;
  * @author Emanuel
  */
 public class Fornecedor {
-
+    
+        private int id;
         private String nome;
         private String cnpj;
         private String email;
         private String endereco;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getNome() {
         return nome;
@@ -47,6 +56,5 @@ public class Fornecedor {
         this.endereco = endereco;
     }
 
-
-        
+         
 }

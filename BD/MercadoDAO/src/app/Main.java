@@ -28,12 +28,10 @@ public class Main {
         int op;
             
         do{
-            System.out.println("1 - Teste conexao BD | 2 - Inserir Fornecedor | 0 - Sair");
+            System.out.println("1 - Teste conexao BD | 2 - Inserir Fornecedor | 3 - Editar Fornecedor | 4 - Listar Fornecedor | 0 - Sair");
             op = sc.nextInt();
             
             if (op == 1) {
-            
-        
 
         try {
             Connection conn = Conexao.conectar();
@@ -67,7 +65,46 @@ public class Main {
                 f.setEndereco(sc.nextLine());
 
                 dao.inserir(f);
-            }else{
+            }
+           
+            if(op == 3){
+                Fornecedor f = new Fornecedor();
+                sc.nextLine();
+                
+                System.out.println("ID do Cliente: ");
+                f.setId(sc.nextInt());
+                sc.nextLine();
+                
+                System.out.println("Novo nome: ");
+                f.setNome(sc.nextLine());
+                
+                System.out.println("Novo CNPJ: ");
+                f.setCnpj(sc.nextLine());
+                
+                System.out.println("Novo email: ");
+                f.setEmail(sc.nextLine());
+                
+                System.out.println("Novo edereco: ");
+                f.setEndereco(sc.nextLine());
+                
+                dao.editar(f);
+
+            }
+            
+            if(op == 4){
+                dao.listar().forEach(f ->
+                    System.out.println(
+                        f.getId() + " - " +
+                        f.getNome() + " - " +
+                        f.getCnpj() + " - " +
+                        f.getEmail() + " - " +
+                        f.getEndereco()
+                            + "\n"
+                    )
+                );
+            }
+
+            else{
                 System.out.println("Escolha uma opção");
             }
 
