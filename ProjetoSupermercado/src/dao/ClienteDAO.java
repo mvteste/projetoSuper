@@ -1,69 +1,74 @@
 package dao;
 
-import model.Cliente;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+//import java.util.List;
+import model.Cliente;
+//import util.Conexao;
 import java.util.List;
 
-
-public class ClienteDAO {
+public class ClienteDAO implements GenericDAO<Cliente>{
     
-    public List<Cliente> listar(){
-        List<Cliente> lista = new ArrayList<>();
+      @Override
+    public void salvar(Cliente cliente){
+        String sql = "INSERT INTO cliente (nome, cpf, telefone ) VALUES (?, ?, ?)";
+          try (Connection conn = Conexao.conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setString(1, cliente.getNome());
+                stmt.setString(2, cliente.getCpf());
+                stmt.setString(4, cliente.getTelefone());
+                              
+            
+                stmt.executeUpdate();
+          } catch (SQLException e) {
+            System.err.println("Erro ao salvar Cliente: " + e.getMessage());
+        }
+    }
+    
+    @Override
+    public void atualizar(Cliente entidade){
+    
+    }
+            
+    @Override        
+    public void excluir (int id){
+    }
+   
+    @Override
+    public Cliente buscarPorId(int id){
+        System.out.println("Buscando Cliente ID: " + id);
+        return null;
+    
+    }
+    
+    @Override
+    public List<Cliente> listarTodos(){
+         // Exemplo com INNER JOIN para trazer os dados da categoria junto
+        String sql = "SELECT p.*, c.nome as cat_nome FROM produto p " +
+                     "INNER JOIN categoria c ON c.id = p.categoria_id";
+        List<Cliente> lista = new ArrayList();
         
-        try{
-            Connection conn = Conexao.conectar();
-            
-            String sql = "SELECT * FROM cliente";
-            
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            
-            ResultSet rs = stmt.executeQuery();
-            
-            while(rs.next()){
+         try (Connection conn = Conexao.conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+             
+                 while (rs.next()) {
                 Cliente c = new Cliente();
-                
                 c.setId(rs.getInt("id"));
                 c.setNome(rs.getString("nome"));
-                
+                c.setNome(rs.getString("cpf"));
+                c.setEmail(rs.getString("email"));
+                c.setTelefone(rs.getString("telefone"));
+                c.setEndereco(rs.getString("endereco"));
+                     
                 lista.add(c);
-             
-            }
-            
-            rs.close();
-            stmt.close();
-            conn.close();
-        
-        
-        }catch(Exception e){
-            e.printStackTrace();
+            } 
+        } catch (SQLException e) {
+            System.err.println("Erro ao listar produtos: " + e.getMessage());
         }
-        
-    
-    
-    return listar();
+        return lista;
     }
-    
-    
-    public void inserir(Cliente c){
-        try(Connection conn = Conexao.conectar()){
-            
-            String sql = "INSERT INTO cliente (nome,cidade,cep) VALUES (?)";
-            
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            
-            stmt.setString(1, c.getNome());
-          
-            
-            stmt.execute();
-                               
-        
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        
-    }
-    
-    
-    
 }
