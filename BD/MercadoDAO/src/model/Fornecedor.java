@@ -15,6 +15,7 @@ public class Fornecedor {
         private String cnpj;
         private String email;
         private String endereco;
+        private int status;
 
     public int getId() {
         return id;
@@ -56,5 +57,12 @@ public class Fornecedor {
         this.endereco = endereco;
     }
 
-         
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+        
 }

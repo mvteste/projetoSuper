@@ -41,6 +41,7 @@ public class FornecedorDAO {
                 f.setCnpj(rs.getString("cnpj"));
                 f.setEmail(rs.getString("email"));
                 f.setEndereco(rs.getString("endereco"));
+                f.setStatus(rs.getInt("status"));
                 
                 lista.add(f);
                 }
@@ -60,7 +61,7 @@ public class FornecedorDAO {
         
         try(Connection conn = Conexao.conectar()) {
                 
-            String sql = "INSERT INTO   fornecedor (nome, cnpj, email, endereco) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO   fornecedor (nome, cnpj, email, endereco, status) VALUES (?, ?, ?, ?, 1)";
             
             PreparedStatement stmt = conn.prepareStatement(sql);
             
@@ -100,5 +101,27 @@ public class FornecedorDAO {
                  e.printStackTrace();
                  }
         }
+    
+    public void desativar(Fornecedor f){
+        
+         try(Connection conn = Conexao.conectar()) {
+         
+             String sql = "UPDATE fornecedor SET status = 0 WHERE id = ?";
+             
+              PreparedStatement stmt = conn.prepareStatement(sql);
+              
+              stmt.setInt(1, f.getId());
+              
+              stmt.executeUpdate();
+              
+              stmt.close();
+              
+              System.out.println("Cliente desativado com sucesso!");
+          }catch(Exception e) {
+              e.printStackTrace();
+          }
+
+    
+    }
 
 }
