@@ -42,6 +42,7 @@ git commit -m "Commit da aula: 09.06.2026"
 
 12º)
 Executar o comando abaixo dando ENTER:
+
 git push
 para enviar os arquivos para o github
 
