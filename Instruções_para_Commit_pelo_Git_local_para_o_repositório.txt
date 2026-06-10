@@ -1,0 +1,47 @@
+Na sua máquina:
+
+1º) Criar uma pasta dentro do C:\
+
+2º)Acessar o cmd, entrar na pasta criada 
+
+3º)Executar o comando abaixo dando ENTER:
+git init
+isso fará com que o repositório seja criado
+
+4º)Executar o comando abaixo dando ENTER:
+git clone https://github.com/mvteste/projetoSuper.git
+
+5º)Acessar a pasta com o comando abaixo:
+cd projetoSuper
+
+6º)Criar a branch local vinculada a sua:
+Executar o comando abaixo dando ENTER:
+git switch -c seuNome origin/seuNome
+
+7º)Executar o comando abaixo dando ENTER:
+git branch
+tem que mostrar o seguinte:
+* seuNome
+  main
+
+8º)Configurar usuário:
+Executar o comando abaixo dando ENTER:
+git config --global user.name "Seu Nome"
+git config --global user.email "seu e-mail que está no GitHub"
+
+9º)Copiar os arquivos do projeto java c:\user\documents\netBeansProjects\
+para dentro dessa pasta criada.
+
+10º)Executar o comando abaixo dando ENTER:
+git add .
+para adicionar todos os arquivos.
+
+11º)
+Executar o comando abaixo dando ENTER:
+git commit -m "Commit da aula: 09.06.2026"
+
+12º)
+Executar o comando abaixo dando ENTER:
+git push
+para enviar os arquivos para o github
+
