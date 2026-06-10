@@ -1,43 +1,37 @@
 package dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-
+import model.Funcionario;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FuncionarioDAO {
 
-    public static void main(String[] args) {
-        //abre conexão com o banco
-        Connection conn = Conexao.conectar();
+    public List<Funcionario> listar() {
+
+        List<Funcionario> lista = new ArrayList();
 
         try {
-            //Comando SQL para buscar todos os alunos
-            String sql = "SELECT * FROM funcionarios";
 
-            //prepara o comando SQL
+            Connection conn = Conexao.conectar();
+
+            String sql = "SELECT * FROM funcionario";
+
             PreparedStatement stmt = conn.prepareStatement(sql);
 
-            //executa a consulta
             ResultSet rs = stmt.executeQuery();
 
-            //percorre cada registro retornado
             while (rs.next()) {
-                //recupera os dados das colunas
-                int id = rs.getInt("id");
-                String nome = rs.getString("nome");
-                String cpf = rs.getString("cpf");
 
-                //imprime no console.
-                System.out.println(id + "-" + nome + "-" + cpf);
+                Funcionario f = new Funcionario();
+
+                lista.add(f);
             }
-            //fecha os recursos
-            rs.close();
-            stmt.close();
-            conn.close();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return lista;
     }
 }
