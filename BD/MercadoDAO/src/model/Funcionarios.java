@@ -19,6 +19,20 @@ public class Funcionarios {
     private String data_admissao;
     private String data_nascimento;
     private int status;
+    private Cargo_Funcionario cargo_funcionario;
+
+    public Funcionarios(int id, String nome, String cpf, String telefone, String email, String endereco, String data_admissao, String data_nascimento, int status, Cargo_Funcionario cargo_funcionario) {
+        this.id = id;
+        this.nome = nome;
+        this.cpf = cpf;
+        this.telefone = telefone;
+        this.email = email;
+        this.endereco = endereco;
+        this.data_admissao = data_admissao;
+        this.data_nascimento = data_nascimento;
+        this.status = status;
+        this.cargo_funcionario = cargo_funcionario;
+    }
 
     public int getId() {
         return id;
@@ -91,5 +105,13 @@ public class Funcionarios {
     public void setStatus(int status) {
         this.status = status;
     }
-      
+
+    public Cargo_Funcionario getCargo_funcionario() {
+        return cargo_funcionario;
+    }
+
+    public void setCargo_funcionario(Cargo_Funcionario cargo_funcionario) {
+        this.cargo_funcionario = cargo_funcionario;
+    }
+     
 }
