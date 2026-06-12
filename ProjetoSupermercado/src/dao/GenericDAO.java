@@ -1,13 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
- */
 package dao;
 
-/**
- *
- * @author HENRIQUETRINDADEPERE
- */
-public interface GenericDAO {
-    
+import java.util.List;
+
+public interface GenericDAO<T> {
+
+    void salvar(T entidade);
+
+    void atualizar(T entidade);
+
+    void excluir(int id);
+
+    T buscarPorId(int id);
+
+    List<T> listarTodos();
 }
