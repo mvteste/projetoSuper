@@ -20,6 +20,10 @@ public class Cargo_Funcionario {
         this.descricao = descricao;
     }
 
+    public Cargo_Funcionario() {
+      
+    }
+
     public int getId() {
         return id;
     }
@@ -43,7 +47,5 @@ public class Cargo_Funcionario {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
-    
-    
-    
+       
 }

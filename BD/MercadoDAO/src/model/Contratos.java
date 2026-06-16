@@ -23,6 +23,10 @@ public class Contratos {
         this.data_inicio = data_inicio;
         this.data_fim = data_fim;
     }
+    
+    public Contratos(){
+    
+    }
 
     public Cargo_Funcionario getCargo_funcionario() {
         return cargo_funcionario;

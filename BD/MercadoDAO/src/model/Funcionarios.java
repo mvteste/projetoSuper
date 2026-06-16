@@ -34,6 +34,11 @@ public class Funcionarios {
         this.cargo_funcionario = cargo_funcionario;
     }
 
+    public Funcionarios() {
+        
+    }
+
+
     public int getId() {
         return id;
     }

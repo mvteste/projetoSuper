@@ -3,12 +3,16 @@ package app;
 import dao.ClientesDAO;
 import dao.Conexao;
 import dao.FornecedorDAO;
-import dao.FuncionariosDAO; // Import adicionado
+import dao.FuncionariosDAO;
+import dao.Cargo_FuncionarioDAO;
+import dao.ContratosDAO; // Import adicionado
 import java.sql.Connection;
 import java.util.Scanner;
 import model.Clientes;
 import model.Fornecedor;
-import model.Funcionarios; // Import adicionado
+import model.Funcionarios;
+import model.Cargo_Funcionario;
+import model.Contratos; // Import adicionado
 
 public class Main {
 
@@ -18,7 +22,9 @@ public class Main {
 
         FornecedorDAO fornecedorDAO = new FornecedorDAO();
         ClientesDAO clienteDAO = new ClientesDAO();
-        FuncionariosDAO funcionarioDAO = new FuncionariosDAO(); // Instância adicionada
+        FuncionariosDAO funcionarioDAO = new FuncionariosDAO();
+        Cargo_FuncionarioDAO cargoDAO = new Cargo_FuncionarioDAO();
+        ContratosDAO contratoDAO = new ContratosDAO(); // Instância adicionada
 
         int op;
 
@@ -28,7 +34,9 @@ public class Main {
             System.out.println("1 - Testar conexão");
             System.out.println("2 - Menu Fornecedor");
             System.out.println("3 - Menu Cliente");
-            System.out.println("4 - Menu Funcionário"); // Opção adicionada
+            System.out.println("4 - Menu Funcionário");
+            System.out.println("5 - Menu Cargo");
+            System.out.println("6 - Menu Contratos"); // Opção adicionada
             System.out.println("0 - Sair");
             System.out.print("Opção: ");
 
@@ -60,7 +68,15 @@ public class Main {
                     break;
 
                 case 4:
-                    menuFuncionario(sc, funcionarioDAO); // Caso adicionado
+                    menuFuncionario(sc, funcionarioDAO);
+                    break;
+
+                case 5:
+                    menuCargo(sc, cargoDAO);
+                    break;
+
+                case 6:
+                    menuContratos(sc, contratoDAO); // Caso adicionado
                     break;
 
                 case 0:
@@ -244,7 +260,6 @@ public class Main {
         } while (op != 0);
     }
 
-    // ================= METHOD ADICIONADO: MENU FUNCIONÁRIO =================
     public static void menuFuncionario(Scanner sc, FuncionariosDAO dao) {
 
         int op;
@@ -286,6 +301,12 @@ public class Main {
 
                     System.out.print("Data de Nascimento: ");
                     func.setData_nascimento(sc.nextLine());
+                    
+                    // Vinculando o cargo digitado pelo usuário:
+                    System.out.print("ID do Cargo do Funcionário: ");
+                    Cargo_Funcionario cargoIns = new Cargo_Funcionario();
+                    cargoIns.setId(sc.nextInt());
+                    func.setCargo_funcionario(cargoIns);
 
                     dao.inserir(func);
                     break;
@@ -317,6 +338,12 @@ public class Main {
 
                     System.out.print("Nova data de nascimento: ");
                     func.setData_nascimento(sc.nextLine());
+                    
+                    // Vinculando o novo cargo na edição:
+                    System.out.print("Novo ID do Cargo: ");
+                    Cargo_Funcionario cargoEdit = new Cargo_Funcionario();
+                    cargoEdit.setId(sc.nextInt());
+                    func.setCargo_funcionario(cargoEdit);
 
                     dao.editar(func);
                     break;
@@ -332,6 +359,7 @@ public class Main {
                             funcionario.getEndereco() + " - " +
                             funcionario.getData_admissao() + " - " +
                             funcionario.getData_nascimento() + " - " +
+                            "Cargo: " + (funcionario.getCargo_funcionario() != null ? funcionario.getCargo_funcionario().getNome() : "Sem Cargo") + " - " +
                             funcionario.getStatus()
                         )
                     );
@@ -344,6 +372,174 @@ public class Main {
                     func.setId(sc.nextInt());
 
                     dao.desativar(func);
+                    break;
+            }
+
+        } while (op != 0);
+    }
+
+    public static void menuCargo(Scanner sc, Cargo_FuncionarioDAO dao) {
+
+        int op;
+
+        do {
+            System.out.println("\n=== MENU CARGO ===");
+            System.out.println("1 - Inserir");
+            System.out.println("2 - Editar");
+            System.out.println("3 - Listar");
+            System.out.println("4 - Deletar");
+            System.out.println("0 - Voltar");
+            System.out.print("Opção: ");
+
+            op = sc.nextInt();
+            sc.nextLine();
+
+            switch (op) {
+
+                case 1:
+                    Cargo_Funcionario cargo = new Cargo_Funcionario();
+
+                    System.out.print("Nome do Cargo: ");
+                    cargo.setNome(sc.nextLine());
+
+                    System.out.print("Descrição: ");
+                    cargo.setDescricao(sc.nextLine());
+
+                    dao.inserir(cargo);
+                    break;
+
+                case 2:
+                    cargo = new Cargo_Funcionario();
+
+                    System.out.print("ID do Cargo: ");
+                    cargo.setId(sc.nextInt());
+                    sc.nextLine();
+
+                    System.out.print("Novo Nome: ");
+                    cargo.setNome(sc.nextLine());
+
+                    System.out.print("Nova Descrição: ");
+                    cargo.setDescricao(sc.nextLine());
+
+                    dao.editar(cargo);
+                    break;
+
+                case 3:
+                    dao.listar().forEach(c ->
+                        System.out.println(
+                            c.getId() + " - " +
+                            c.getNome() + " - " +
+                            c.getDescricao()
+                        )
+                    );
+                    break;
+
+                case 4:
+                    cargo = new Cargo_Funcionario();
+
+                    System.out.print("ID do Cargo a deletar: ");
+                    cargo.setId(sc.nextInt());
+
+                    dao.deletar(cargo);
+                    break;
+            }
+
+        } while (op != 0);
+    }
+
+    // ================= MÉTODO ADICIONADO: MENU CONTRATOS =================
+    public static void menuContratos(Scanner sc, ContratosDAO dao) {
+
+        int op;
+
+        do {
+            System.out.println("\n=== MENU CONTRATOS ===");
+            System.out.println("1 - Registrar Contrato");
+            System.out.println("2 - Editar Contrato");
+            System.out.println("3 - Listar Contratos");
+            System.out.println("4 - Remover Contrato");
+            System.out.println("0 - Voltar");
+            System.out.print("Opção: ");
+
+            op = sc.nextInt();
+            sc.nextLine();
+
+            switch (op) {
+
+                case 1:
+                    Cargo_Funcionario cg = new Cargo_Funcionario();
+                    Funcionarios fn = new Funcionarios();
+
+                    System.out.print("ID do Cargo: ");
+                    cg.setId(sc.nextInt());
+
+                    System.out.print("ID do Funcionário: ");
+                    fn.setId(sc.nextInt());
+
+                    System.out.print("Salário (ex: 2500,50): ");
+                    double salario = sc.nextDouble();
+                    sc.nextLine(); 
+
+                    System.out.print("Data de Início (AAAA-MM-DD): ");
+                    String inicio = sc.nextLine();
+
+                    System.out.print("Data de Fim (AAAA-MM-DD ou deixe em branco): ");
+                    String fim = sc.nextLine();
+
+                    Contratos novoContrato = new Contratos(cg, fn, salario, inicio, fim);
+                    dao.inserir(novoContrato);
+                    break;
+
+                case 2:
+                    cg = new Cargo_Funcionario();
+                    fn = new Funcionarios();
+
+                    System.out.println("-- Identificadores do Contrato a ser Alterado --");
+                    System.out.print("ID do Cargo Atual: ");
+                    cg.setId(sc.nextInt());
+
+                    System.out.print("ID do Funcionário Atual: ");
+                    fn.setId(sc.nextInt());
+
+                    System.out.print("Novo Salário: ");
+                    double novoSalario = sc.nextDouble();
+                    sc.nextLine();
+
+                    System.out.print("Nova Data de Início (AAAA-MM-DD): ");
+                    String novoInicio = sc.nextLine();
+
+                    System.out.print("Nova Data de Fim (AAAA-MM-DD): ");
+                    String novoFim = sc.nextLine();
+
+                    Contratos contratoEditado = new Contratos(cg, fn, novoSalario, novoInicio, novoFim);
+                    dao.editar(contratoEditado);
+                    break;
+
+                case 3:
+                    System.out.println("\n--- LISTA DE CONTRATOS ATIVOS ---");
+                    dao.listar().forEach(con -> 
+                        System.out.println(
+                            "Cargo: (" + con.getCargo_funcionario().getId() + ") " + con.getCargo_funcionario().getNome() + " | " +
+                            "Func.: (" + con.getFuncionario().getId() + ") " + con.getFuncionario().getNome() + " | " +
+                            "Salário: R$ " + con.getSalario() + " | " +
+                            "Vigência: " + con.getData_inicio() + " até " + (con.getData_fim() == null || con.getData_fim().isEmpty() ? "Atual" : con.getData_fim())
+                        )
+                    );
+                    break;
+
+                case 4:
+                    cg = new Cargo_Funcionario();
+                    fn = new Funcionarios();
+
+                    System.out.println("-- Identificadores para Remoção --");
+                    System.out.print("ID do Cargo do Contrato: ");
+                    cg.setId(sc.nextInt());
+
+                    System.out.print("ID do Funcionário do Contrato: ");
+                    fn.setId(sc.nextInt());
+
+                    Contratos contratoDeletar = new Contratos(cg, fn, 0, "", "");
+                    dao.deletar(contratoDeletar);
                     break;
             }
 
