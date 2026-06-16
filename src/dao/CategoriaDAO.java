@@ -5,50 +5,47 @@
 package dao;
 
 import connection.Conexao;
-import model.Produto;
+import model.Categoria;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  *
  * @author GUSTAVOSCALEIMORAES
  */
-public class ProdutoDAO implements GenericDAO<Produto>{
+public class CategoriaDAO implements GenericDAO<Categoria> {
     
     @Override
-    public void salvar(Produto entidade){
+    public void salvar(Categoria entidade){
         System.out.println("Salvando");
         
     }
     
     @Override 
-    public void atualizar(Produto entidade){
-        System.out.println("Produto atualizado: " + entidade.getDescricao());
+    public void atualizar(Categoria entidade){
+        System.out.println("Cliente atualizado: " + entidade.getNome());
     
     }
     
     @Override
     public void excluir(int id){
-        System.out.println("Produto excluído" + id);
+        System.out.println("Cliente excluído" +id);
     
     }
     
     @Override 
-    public Produto buscarPorId(int id){
-        System.out.println("Buscando Produto ID: " + id);
+    public Categoria buscarPorId(int id){
+        System.out.println("Buscando cliente ID: " + id);
         return null;
     
     }
     
     @Override 
-    public List<Produto>listarTodos(){
-        System.out.println("Listando Produtos:");
+    public List<Categoria>listarTodos(){
+        System.out.println("Listando Clientes:");
         return null;
     
     
     }
-
-    
 }

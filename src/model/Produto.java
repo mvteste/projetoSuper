@@ -14,7 +14,6 @@ package model;
 public class Produto {
     private int id;
     private String descricao;
-    private double preco;
     private Categoria categoria; // Associação com Categoria
 
     public int getId() {
@@ -31,14 +30,6 @@ public class Produto {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
-    }
-
-    public double getPreco() {
-        return preco;
-    }
-
-    public void setPreco(double preco) {
-        this.preco = preco;
     }
 
     public Categoria getCategoria() {

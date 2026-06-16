@@ -6,45 +6,48 @@ package dao;
 
 import java.util.List;
 import model.Cliente;
-import model.Funcionario;
+import model.Fornecedor;
 
 /**
  *
  * @author GUSTAVOSCALEIMORAES
  */
-public class FuncionarioDAO implements GenericDAO<Funcionario>{
+public class FornecedorDAO implements GenericDAO<Fornecedor>{
     
     @Override
-    public void salvar(Funcionario entidade){
+    public void salvar(Fornecedor entidade){
         System.out.println("Salvando");
         
     }
     
     @Override 
-    public void atualizar(Funcionario entidade){
-        System.out.println("Funcionario atualizado: " + entidade.getNome());
+    public void atualizar(Fornecedor entidade){
+        System.out.println("Fornecedor atualizado: " + entidade.getNome());
     
     }
     
-    @Override
+    
     public void excluir(int id){
-        System.out.println("Funcionario excluído" +id);
+        System.out.println("Fornecedor excluído" + id);
     
     }
     
     @Override 
-    public Funcionario buscarPorId(int id){
-        System.out.println("Buscando Funcionario ID: " + id);
+    public Fornecedor buscarPorId(int id){
+        System.out.println("Buscando Fornecedores ID: " + id);
         return null;
     
     }
     
     @Override 
-    public List<Funcionario>listarTodos(){
-        System.out.println("Listando Produtos:");
+    public List<Fornecedor>listarTodos(){
+        System.out.println("Listando Fornecedores:");
         return null;
     
     
     }
 
+ 
+
+    
 }

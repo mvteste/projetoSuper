@@ -8,12 +8,12 @@ package view;
  *
  * @author GUSTAVOSCALEIMORAES
  */
-public class TelaPrincipal extends javax.swing.JInternalFrame {
+public class VendasView extends javax.swing.JInternalFrame {
 
     /**
-     * Creates new form TelaPrincipal
+     * Creates new form VendasView
      */
-    public TelaPrincipal() {
+    public VendasView() {
         initComponents();
     }
 

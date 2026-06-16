@@ -10,7 +10,7 @@ public class Conexao {
     //jdbc:mysql-> protocolo JDBC para MySQL
     //localhost -> servidor do banco
     //escola -> nome do banco
-    private static final String URL = "jdbc:mysql://localhost:3306/sistema";
+    private static final String URL = "jdbc:mysql://localhost:3306/sistema_mercado";
     
     //usuário do banco
     private static final String USER = "root";

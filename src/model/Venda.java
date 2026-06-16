@@ -13,7 +13,7 @@ import java.time.LocalDate;
 public class Venda {
     private int id;
     private LocalDate dataVenda;
-    private Clientes cliente; // Ligando com o seu arquivo Clientes.java
+    private Cliente cliente; // Ligando com o seu arquivo Cliente.java
     private Funcionario funcionario;
     private double valorTotal;
 
@@ -33,11 +33,11 @@ public class Venda {
         this.dataVenda = dataVenda;
     }
 
-    public Clientes getCliente() {
+    public Cliente getCliente() {
         return cliente;
     }
 
-    public void setCliente(Clientes cliente) {
+    public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
 

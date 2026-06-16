@@ -8,12 +8,12 @@ package view;
  *
  * @author GUSTAVOSCALEIMORAES
  */
-public class TelaPrincipal extends javax.swing.JInternalFrame {
+public class FuncionarioView extends javax.swing.JInternalFrame {
 
     /**
-     * Creates new form TelaPrincipal
+     * Creates new form FuncionarioView
      */
-    public TelaPrincipal() {
+    public FuncionarioView() {
         initComponents();
     }
 
