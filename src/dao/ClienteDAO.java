@@ -7,31 +7,40 @@ import java.util.List;
 
 public class ClienteDAO implements GenericDAO<Cliente>{
 
-        public void inserir(Cliente c){
+    public void inserir(Cliente c){
+        try(Connection conn = Conexao.conectar()){
 
-            try(Connection conn = Conexao.conectar()){
+        // O SQL deve conter todas as colunas que correspondem ao seu modelo Cliente
+        String sql = """
+            INSERT INTO cliente
+            (nome, data_nascimento, cpf, telefone, endereco)
+            VALUES (?, ?, ?, ?, ?)
+            """;
 
-                String sql = """
-                    INSERT INTO cliente
-                    (nome, data_nascimento, cpf)
-                    VALUES (?, ?, ?)
-                    """;
+        PreparedStatement stmt = conn.prepareStatement(sql);
 
-                PreparedStatement stmt =
-                        conn.prepareStatement(sql);
-
-                stmt.setString(1, c.getNome());
-                stmt.setDate(2, c.getData_Nascimento());
-                stmt.setString(3, c.getCpf());
-
-                stmt.executeUpdate();
-
-                System.out.println("Cliente cadastrado!");
-
-            }catch(Exception e){
-                e.printStackTrace();
-            }
+        // Abaixo, configuramos EXATAMENTE 5 valores:
+        stmt.setString(1, c.getNome());
+        
+        if (c.getData_Nascimento() != null) {
+            java.sql.Date dataSql = new java.sql.Date(c.getData_Nascimento().getTime());
+            stmt.setDate(2, dataSql);
+        } else {
+            stmt.setNull(2, java.sql.Types.DATE);
         }
+
+        stmt.setString(3, c.getCpf());
+        stmt.setString(4, c.getTelefone());
+        stmt.setString(5, c.getEndereco());
+
+        stmt.executeUpdate();
+
+    } catch (java.sql.SQLIntegrityConstraintViolationException e) {
+        javax.swing.JOptionPane.showMessageDialog(null, "Erro: Este CPF já está cadastrado no sistema!");
+    } catch(Exception e){
+        e.printStackTrace();
+    }
+}
 
     @Override
     public void salvar(Cliente entidade){

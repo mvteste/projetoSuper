@@ -1,6 +1,6 @@
 package model;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class Cliente {
 
@@ -9,8 +9,9 @@ public class Cliente {
     private String cpf;
     private String email;
     private String telefone;
-    private Date data_Nascimento;
+    private Date data_Nascimento; // Agora é java.util.Date
     private String endereco;
+    
 
     public Cliente() {
     }
@@ -18,15 +19,16 @@ public class Cliente {
     public void setData_Nascimento(Date data_Nascimento) {
         this.data_Nascimento = data_Nascimento;
     }
+    
+    public Date getData_Nascimento() {
+        return data_Nascimento;
+    }
 
     public int getId() {
         return id;
     }
 
-    public Date getData_Nascimento() {
-        return data_Nascimento;
-    }
-
+   
     public void setId(int id) {
         this.id = id;
     }
