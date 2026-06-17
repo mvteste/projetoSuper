@@ -1,4 +1,3 @@
-
 package controller;
 
 import dao.ContasPagarDAO;
@@ -6,28 +5,49 @@ import model.ContasPagar;
 import java.util.List;
 
 public class ContasPagarController {
-    
+
     private ContasPagarDAO contasPagarDAO = new ContasPagarDAO();
-    
-    public List<ContasPagar> obterContas(){
+
+    // Listar
+    public List<ContasPagar> obterContas() {
         return contasPagarDAO.listar();
-    
-    
-    
     }
-    
-    public void salvarContas(Float valor, String data, int id_fornecedor, String status){
-    
+
+    // Inserir
+    public void salvarContas(float valor, String data, int idFornecedor, String status) {
+
         ContasPagar cp = new ContasPagar();
-        cp.setId_fornecedor(id_fornecedor);
-        cp.setStatus(status);
+
         cp.setValor(valor);
         cp.setData(data);
-        
+        cp.setId_fornecedor(idFornecedor);
+        cp.setStatus(status);
+
         contasPagarDAO.inserir(cp);
-    
-    
     }
-    
-    
+
+    // Atualizar
+    public void atualizarContas(int id, float valor, String data,
+            int idFornecedor, String status) {
+
+        ContasPagar cp = new ContasPagar();
+
+        cp.setId(id);
+        cp.setValor(valor);
+        cp.setData(data);
+        cp.setId_fornecedor(idFornecedor);
+        cp.setStatus(status);
+
+        contasPagarDAO.atualizar(cp);
+    }
+
+    // Excluir
+    public void excluirContas(int id) {
+        contasPagarDAO.deletar(id);
+    }
+
+    // Buscar por ID
+    public ContasPagar buscarConta(int id) {
+        return contasPagarDAO.buscarPorId(id);
+    }
 }

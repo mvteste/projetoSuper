@@ -1,39 +1,61 @@
-
 package controller;
 
 import dao.ContratoTrabDAO;
 import model.ContratoTrab;
 import java.util.List;
-        
 
 public class ContratoTrabController {
-    
+
     private ContratoTrabDAO contratoDAO = new ContratoTrabDAO();
-    
-    public List<ContratoTrab> obterContrato(){
+
+    // Listar
+    public List<ContratoTrab> obterContratos() {
         return contratoDAO.listar();
-    
-    
-    
     }
-    
-    public void salvarContrato(String cargo, float salario, String data_inicio, String data_fim, String tipo_contrato, int funcionario_id ){
-    
-    
+
+    // Inserir
+    public void salvarContrato(String cargo, float salario,
+            String dataInicio, String dataFim,
+            String tipoContrato, int funcionarioId) {
+
         ContratoTrab ct = new ContratoTrab();
-        
+
         ct.setCargo(cargo);
         ct.setSalario(salario);
-        ct.setData_inicio(data_inicio);
-        ct.setData_fim(data_fim);
-        ct.setTipo_contrato(tipo_contrato);
-        ct.setId_funcionario(funcionario_id);
-        
+        ct.setData_inicio(dataInicio);
+        ct.setData_fim(dataFim);
+        ct.setTipo_contrato(tipoContrato);
+        ct.setId_funcionario(funcionarioId);
+
         contratoDAO.inserir(ct);
-        
-        
-    
     }
-    
-    
+
+    // Atualizar
+    public void atualizarContrato(int id, String cargo,
+            float salario, String dataInicio,
+            String dataFim, String tipoContrato,
+            int funcionarioId) {
+
+        ContratoTrab ct = new ContratoTrab();
+
+        ct.setId(id);
+        ct.setCargo(cargo);
+        ct.setSalario(salario);
+        ct.setData_inicio(dataInicio);
+        ct.setData_fim(dataFim);
+        ct.setTipo_contrato(tipoContrato);
+        ct.setId_funcionario(funcionarioId);
+
+        contratoDAO.atualizar(ct);
+    }
+
+    // Excluir
+    public void excluirContrato(int id) {
+        contratoDAO.deletar(id);
+    }
+
+    // Buscar por ID
+    public ContratoTrab buscarContrato(int id) {
+        return contratoDAO.buscarPorId(id);
+    }
 }
