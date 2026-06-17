@@ -12,7 +12,7 @@ public class Pedido_Compra {
     
     private int id;
     private int quantidade;
-    private int total;
+    private double total;
     private Fornecedor fornecedor;
 
     public Pedido_Compra(int id, int quantidade, int total, Fornecedor fornecedor) {
@@ -20,6 +20,10 @@ public class Pedido_Compra {
         this.quantidade = quantidade;
         this.total = total;
         this.fornecedor = fornecedor;
+    }
+    
+    public Pedido_Compra(){
+    
     }
 
     public int getId() {
@@ -38,11 +42,11 @@ public class Pedido_Compra {
         this.quantidade = quantidade;
     }
 
-    public int getTotal() {
+    public double getTotal() {
         return total;
     }
 
-    public void setTotal(int total) {
+    public void setTotal(double total) {
         this.total = total;
     }
 
@@ -53,7 +57,5 @@ public class Pedido_Compra {
     public void setFornecedor(Fornecedor fornecedor) {
         this.fornecedor = fornecedor;
     }
-    
-    
-    
+ 
 }

@@ -16,14 +16,20 @@ public class Contas_Pagar {
     private String data_vencimento;
     private Caixa caixa;
     private Pedido_Compra pedido_compra;
+    private int status;
 
-    public Contas_Pagar(int id, String nome, double valor, String data_vencimento, Caixa caixa, Pedido_Compra pedido_compra) {
+    public Contas_Pagar(int id, String nome, double valor, String data_vencimento, Caixa caixa, Pedido_Compra pedido_compra, int status) {
         this.id = id;
         this.nome = nome;
         this.valor = valor;
         this.data_vencimento = data_vencimento;
         this.caixa = caixa;
         this.pedido_compra = pedido_compra;
+        this.status = status;
+    }
+
+    public Contas_Pagar(){
+    
     }
 
     public int getId() {
@@ -74,6 +80,13 @@ public class Contas_Pagar {
         this.pedido_compra = pedido_compra;
     }
 
-   
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+    
     
 }

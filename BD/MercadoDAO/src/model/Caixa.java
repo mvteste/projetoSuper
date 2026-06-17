@@ -19,6 +19,10 @@ public class Caixa {
         this.nome = nome;
         this.valor = valor;
     }
+    
+    public Caixa(){
+    
+    }
 
     public int getId() {
         return id;
