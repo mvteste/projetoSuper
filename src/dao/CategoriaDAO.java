@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dao;
 
 import connection.Conexao;
@@ -10,42 +6,31 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author GUSTAVOSCALEIMORAES
- */
-public class CategoriaDAO implements GenericDAO<Categoria> {
-    
-    @Override
-    public void salvar(Categoria entidade){
-        System.out.println("Salvando");
-        
-    }
-    
-    @Override 
-    public void atualizar(Categoria entidade){
-        System.out.println("Cliente atualizado: " + entidade.getNome());
-    
-    }
-    
-    @Override
-    public void excluir(int id){
-        System.out.println("Cliente excluído" +id);
-    
-    }
-    
-    @Override 
-    public Categoria buscarPorId(int id){
-        System.out.println("Buscando cliente ID: " + id);
-        return null;
-    
-    }
-    
-    @Override 
-    public List<Categoria>listarTodos(){
-        System.out.println("Listando Clientes:");
-        return null;
-    
-    
+public class CategoriaDAO {
+
+    public List<Categoria> listarTodos() {
+        List<Categoria> lista = new ArrayList<>();
+        String sql = "SELECT * FROM categoria"; 
+
+        try (Connection conn = Conexao.conectar();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Categoria c = new Categoria();
+                
+                // Pegando os dados com os Nomes EXATOS das colunas da sua foto
+                c.setId(rs.getInt("id")); 
+                c.setNome(rs.getString("nome")); 
+                c.setDescricao(rs.getString("descricao")); 
+                
+                lista.add(c);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Erro ao listar categorias: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return lista;
     }
 }
