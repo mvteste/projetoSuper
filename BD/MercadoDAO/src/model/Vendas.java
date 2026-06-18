@@ -23,6 +23,10 @@ public class Vendas {
         this.cliente = cliente;
         this.funcionario = funcionario;
     }
+    
+    public Vendas(){
+    
+    }
 
     public int getId() {
         return id;

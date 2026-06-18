@@ -13,17 +13,23 @@ public class Contas_Receber {
     private int id;
     private String nome;
     private double valor;
-    private String data_vencimento;
+    private String data_recebimento;
     private Caixa caixa;
     private Vendas vendas;
+    private int status;
 
-    public Contas_Receber(int id, String nome, double valor, String data_vencimento, Caixa caixa, Vendas vendas) {
+    public Contas_Receber(int id, String nome, double valor, String data_recebimento, Caixa caixa, Vendas vendas, int status) {
         this.id = id;
         this.nome = nome;
         this.valor = valor;
-        this.data_vencimento = data_vencimento;
+        this.data_recebimento = data_recebimento;
         this.caixa = caixa;
         this.vendas = vendas;
+        this.status = status;
+    }
+
+    public Contas_Receber(){
+
     }
 
     public int getId() {
@@ -50,12 +56,12 @@ public class Contas_Receber {
         this.valor = valor;
     }
 
-    public String getData_vencimento() {
-        return data_vencimento;
+    public String getData_recebimento() {
+        return data_recebimento;
     }
 
-    public void setData_vencimento(String data_vencimento) {
-        this.data_vencimento = data_vencimento;
+    public void setData_recebimento(String data_recebimento) {
+        this.data_recebimento = data_recebimento;
     }
 
     public Caixa getCaixa() {
@@ -73,6 +79,17 @@ public class Contas_Receber {
     public void setVendas(Vendas vendas) {
         this.vendas = vendas;
     }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
     
+    
+
+
     
 }

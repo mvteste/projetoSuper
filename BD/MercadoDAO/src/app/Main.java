@@ -9,6 +9,7 @@ import dao.ContratosDAO;
 import dao.Pedido_CompraDAO;
 import dao.CaixaDAO; 
 import dao.Contas_PagarDAO; 
+import dao.Contas_ReceberDAO;
 import java.sql.Connection;
 import java.util.Scanner;
 import model.Clientes;
@@ -19,6 +20,8 @@ import model.Contratos;
 import model.Pedido_Compra;
 import model.Caixa; 
 import model.Contas_Pagar; 
+import model.Contas_Receber;
+import model.Vendas;
 
 public class Main {
 
@@ -35,6 +38,7 @@ public class Main {
         Pedido_CompraDAO pedidoCompraDAO = new Pedido_CompraDAO();
         CaixaDAO caixaDAO = new CaixaDAO(); 
         Contas_PagarDAO contasPagarDAO = new Contas_PagarDAO(); 
+        Contas_ReceberDAO contasReceberDAO = new Contas_ReceberDAO();
 
         int op;
 
@@ -50,6 +54,7 @@ public class Main {
             System.out.println("7 - Menu Pedido de Compra");
             System.out.println("8 - Menu Caixa"); 
             System.out.println("9 - Menu Contas a Pagar"); 
+            System.out.println("10 - Menu Contas a Receber");
             System.out.println("0 - Sair");
             System.out.print("Opção: ");
 
@@ -102,6 +107,10 @@ public class Main {
 
                 case 9:
                     menuContasPagar(sc, contasPagarDAO); 
+                    break;
+
+                case 10:
+                    menuContasReceber(sc, contasReceberDAO);
                     break;
 
                 case 0:
@@ -721,7 +730,7 @@ public class Main {
         } while (op != 0);
     }
 
-   public static void menuContasPagar(Scanner sc, Contas_PagarDAO dao) {
+    public static void menuContasPagar(Scanner sc, Contas_PagarDAO dao) {
 
         int op;
 
@@ -731,7 +740,7 @@ public class Main {
             System.out.println("2 - Editar Conta a Pagar");
             System.out.println("3 - Listar Contas a Pagar");
             System.out.println("4 - Remover Conta a Pagar");
-            System.out.println("5 - Pagar Conta (Baixa no Caixa)"); // Adicionado aqui
+            System.out.println("5 - Pagar Conta (Baixa no Caixa)");
             System.out.println("0 - Voltar");
             System.out.print("Opção: ");
 
@@ -811,21 +820,9 @@ public class Main {
                 case 3:
                     System.out.println("\n--- LISTA DE CONTAS A PAGAR ---");
                     dao.listar().forEach(conta -> {
-                        String infoPedido = (conta.getPedido_compra() != null) 
-                                ? " | Pedido Compra ID: " + conta.getPedido_compra().getId() 
-                                : " | Pedido Compra: Nenhum";
-                        
+                        String infoPedido = (conta.getPedido_compra() != null) ? " | Pedido Compra ID: " + conta.getPedido_compra().getId() : " | Pedido Compra: Nenhum";
                         String statusTexto = (conta.getStatus() == 2) ? "PAGA" : "PENDENTE";
-                        
-                        System.out.println(
-                            "ID: " + conta.getId() + " | " +
-                            "Descrição: " + conta.getNome() + " | " +
-                            "Valor: R$ " + conta.getValor() + " | " +
-                            "Vencimento: " + conta.getData_vencimento() + " | " +
-                            "Status: " + statusTexto + " | " +
-                            "Caixa: " + conta.getCaixa().getNome() +
-                            infoPedido
-                        );
+                        System.out.println("ID: " + conta.getId() + " | " + "Descrição: " + conta.getNome() + " | " + "Valor: R$ " + conta.getValor() + " | " + "Vencimento: " + conta.getData_vencimento() + " | " + "Status: " + statusTexto + " | " + "Caixa: " + conta.getCaixa().getNome() + infoPedido);
                     });
                     break;
 
@@ -834,16 +831,123 @@ public class Main {
 
                     System.out.print("ID da Conta a ser removida: ");
                     cp.setId(sc.nextInt());
-                    
+
                     dao.deletar(cp);
                     break;
 
-                case 5: // Nova lógica adicionada para executar o método
+                case 5:
                     System.out.print("Digite o ID da conta que deseja pagar: ");
                     int idContaPagar = sc.nextInt();
                     sc.nextLine();
 
                     dao.pagarConta(idContaPagar);
+                    break;
+            }
+
+        } while (op != 0);
+    }
+
+    public static void menuContasReceber(Scanner sc, Contas_ReceberDAO dao) {
+
+        int op;
+
+        do {
+            System.out.println("\n=== MENU CONTAS A RECEBER ===");
+            System.out.println("1 - Registrar Conta a Receber");
+            System.out.println("2 - Editar Conta a Receber");
+            System.out.println("3 - Listar Contas a Receber");
+            System.out.println("4 - Receber Conta (Entrada no Caixa)");
+            System.out.println("0 - Voltar");
+            System.out.print("Opção: ");
+
+            op = sc.nextInt();
+            sc.nextLine();
+
+            switch (op) {
+
+                case 1:
+                    Contas_Receber cr = new Contas_Receber();
+                    Caixa cx = new Caixa();
+                    Vendas v = new Vendas();
+
+                    System.out.print("Nome da Conta (Descrição): ");
+                    cr.setNome(sc.nextLine());
+
+                    System.out.print("Valor da Conta (ex: 500,00): ");
+                    cr.setValor(sc.nextDouble());
+                    sc.nextLine();
+
+                    System.out.print("Data de Vencimento (AAAA-MM-DD): ");
+                    cr.setData_recebimento(sc.nextLine());
+
+                    System.out.print("ID do Caixa de Destino: ");
+                    cx.setId(sc.nextInt());
+                    cr.setCaixa(cx);
+
+                    System.out.print("ID da Venda Relacionada (Digite 0 se não houver): ");
+                    int idVenda = sc.nextInt();
+
+                    if (idVenda > 0) {
+                        v.setId(idVenda);
+                        cr.setVendas(v);
+                    } else {
+                        cr.setVendas(null);
+                    }
+
+                    dao.inserir(cr);
+                    break;
+
+                case 2:
+                    cr = new Contas_Receber();
+                    cx = new Caixa();
+                    v = new Vendas();
+
+                    System.out.print("ID da Conta a ser editada: ");
+                    cr.setId(sc.nextInt());
+                    sc.nextLine();
+
+                    System.out.print("Novo Nome da Conta: ");
+                    cr.setNome(sc.nextLine());
+
+                    System.out.print("Novo Valor: ");
+                    cr.setValor(sc.nextDouble());
+                    sc.nextLine();
+
+                    System.out.print("Nova Data de Vencimento (AAAA-MM-DD): ");
+                    cr.setData_recebimento(sc.nextLine());
+
+                    System.out.print("Novo ID do Caixa Vinculado: ");
+                    cx.setId(sc.nextInt());
+                    cr.setCaixa(cx);
+
+                    System.out.print("Novo ID da Venda (Digite 0 se não houver): ");
+                    int idVendaEdit = sc.nextInt();
+
+                    if (idVendaEdit > 0) {
+                        v.setId(idVendaEdit);
+                        cr.setVendas(v);
+                    } else {
+                        cr.setVendas(null);
+                    }
+
+                    dao.editar(cr);
+                    break;
+
+                case 3:
+                    System.out.println("\n--- LISTA DE CONTAS A RECEBER ---");
+                    dao.listar().forEach(conta -> {
+                        String infoVenda = (conta.getVendas() != null) ? " | Venda ID: " + conta.getVendas().getId() : " | Venda: Nenhuma";
+                        String statusTexto = (conta.getStatus() == 2) ? "RECEBIDA" : "PENDENTE";
+                        System.out.println("ID: " + conta.getId() + " | " + "Descrição: " + conta.getNome() + " | " + "Valor: R$ " + conta.getValor() + " | " + "Vencimento: " + conta.getData_recebimento() + " | " + "Status: " + statusTexto + " | " + "Caixa Destino: " + conta.getCaixa().getNome() + infoVenda);
+                    });
+                    break;
+
+                case 4:
+                    System.out.print("Digite o ID da conta que deseja dar entrada/receber: ");
+                    int idContaReceber = sc.nextInt();
+                    sc.nextLine();
+
+                    dao.receberConta(idContaReceber);
                     break;
             }
 
