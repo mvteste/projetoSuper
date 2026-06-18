@@ -16,14 +16,20 @@ public class Produtos {
     private double preco;
     private String data_vencimento;
     private Categoria_Produtos categoria_produto;
+    private int status;
 
-    public Produtos(int id, String nome, String descricao, double preco, String data_vencimento, Categoria_Produtos categoria_produto) {
+    public Produtos(int id, String nome, String descricao, double preco, String data_vencimento, Categoria_Produtos categoria_produto, int status) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
         this.preco = preco;
         this.data_vencimento = data_vencimento;
         this.categoria_produto = categoria_produto;
+        this.status = status;
+    }
+    
+    public Produtos(){
+    
     }
 
     public int getId() {
@@ -73,8 +79,15 @@ public class Produtos {
     public void setCategoria_produto(Categoria_Produtos categoria_produto) {
         this.categoria_produto = categoria_produto;
     }
-    
-    
-    
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+   
     
 }

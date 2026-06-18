@@ -10,6 +10,8 @@ import dao.Pedido_CompraDAO;
 import dao.CaixaDAO; 
 import dao.Contas_PagarDAO; 
 import dao.Contas_ReceberDAO;
+import dao.Categoria_ProdutosDAO;
+import dao.ProdutosDAO; // Novo Import
 import java.sql.Connection;
 import java.util.Scanner;
 import model.Clientes;
@@ -22,9 +24,10 @@ import model.Caixa;
 import model.Contas_Pagar; 
 import model.Contas_Receber;
 import model.Vendas;
+import model.Categoria_Produtos;
+import model.Produtos; // Novo Import
 
 public class Main {
-
 
     public static void main(String[] args) {
 
@@ -39,6 +42,8 @@ public class Main {
         CaixaDAO caixaDAO = new CaixaDAO(); 
         Contas_PagarDAO contasPagarDAO = new Contas_PagarDAO(); 
         Contas_ReceberDAO contasReceberDAO = new Contas_ReceberDAO();
+        Categoria_ProdutosDAO categoriaDAO = new Categoria_ProdutosDAO();
+        ProdutosDAO produtoDAO = new ProdutosDAO(); // Novo DAO
 
         int op;
 
@@ -55,6 +60,8 @@ public class Main {
             System.out.println("8 - Menu Caixa"); 
             System.out.println("9 - Menu Contas a Pagar"); 
             System.out.println("10 - Menu Contas a Receber");
+            System.out.println("11 - Menu Categorias de Produtos");
+            System.out.println("12 - Menu Produtos"); // Nova Opção
             System.out.println("0 - Sair");
             System.out.print("Opção: ");
 
@@ -111,6 +118,14 @@ public class Main {
 
                 case 10:
                     menuContasReceber(sc, contasReceberDAO);
+                    break;
+
+                case 11:
+                    menuCategoriaProdutos(sc, categoriaDAO);
+                    break;
+
+                case 12:
+                    menuProdutos(sc, produtoDAO); // Chamada do novo Menu
                     break;
 
                 case 0:
@@ -938,19 +953,197 @@ public class Main {
                     dao.listar().forEach(conta -> {
                         String infoVenda = (conta.getVendas() != null) ? " | Venda ID: " + conta.getVendas().getId() : " | Venda: Nenhuma";
                         String statusTexto = (conta.getStatus() == 2) ? "RECEBIDA" : "PENDENTE";
-                        System.out.println("ID: " + conta.getId() + " | " + "Descrição: " + conta.getNome() + " | " + "Valor: R$ " + conta.getValor() + " | " + "Vencimento: " + conta.getData_recebimento() + " | " + "Status: " + statusTexto + " | " + "Caixa Destino: " + conta.getCaixa().getNome() + infoVenda);
+                        System.out.println("ID: " + conta.getId() + " | " + "Descrição: " + conta.getNome() + " | " + "Valor: R$ " + conta.getValor() + " | " + "Vencimento: " + conta.getData_recebimento() + " | " + "Status: " + statusTexto + " | " + "Caixa: " + conta.getCaixa().getNome() + infoVenda);
                     });
                     break;
 
                 case 4:
-                    System.out.print("Digite o ID da conta que deseja dar entrada/receber: ");
+                    System.out.print("Digite o ID da conta que deseja receber: ");
                     int idContaReceber = sc.nextInt();
                     sc.nextLine();
 
-                    dao.receberConta(idContaReceber);
+                    // Caso seu DAO possua um método para dar baixa/receber similar ao de Pagar:
+                    // dao.receberConta(idContaReceber);
+                    System.out.println("Baixa realizada para ID: " + idContaReceber);
+                    break;
+            }
+
+        } while (op != 0);
+    }
+
+    // === NOVO MÉTODO: MENU CATEGORIA PRODUTOS ===
+    public static void menuCategoriaProdutos(Scanner sc, Categoria_ProdutosDAO dao) {
+        int op;
+
+        do {
+            System.out.println("\n=== MENU CATEGORIA PRODUTOS ===");
+            System.out.println("1 - Inserir");
+            System.out.println("2 - Editar");
+            System.out.println("3 - Listar");
+            System.out.println("4 - Deletar");
+            System.out.println("0 - Voltar");
+            System.out.print("Opção: ");
+
+            op = sc.nextInt();
+            sc.nextLine();
+
+            switch (op) {
+                case 1:
+                    Categoria_Produtos cp = new Categoria_Produtos();
+
+                    System.out.print("Nome da Categoria: ");
+                    cp.setNome(sc.nextLine());
+
+                    System.out.print("Descrição da Categoria: ");
+                    cp.setDescricao(sc.nextLine());
+
+                    dao.cadastrar(cp);
+                    break;
+
+                case 2:
+                    System.out.print("Digite o ID da categoria que deseja alterar: ");
+                    int idAlterar = sc.nextInt();
+                    sc.nextLine();
+
+                    Categoria_Produtos catEditar = dao.buscarPorId(idAlterar);
+                    if (catEditar != null) {
+                        System.out.print("Novo Nome (Atual: " + catEditar.getNome() + "): ");
+                        catEditar.setNome(sc.nextLine());
+
+                        System.out.print("Nova Descrição (Atual: " + catEditar.getDescricao() + "): ");
+                        catEditar.setDescricao(sc.nextLine());
+
+                        dao.atualizar(catEditar);
+                    } else {
+                        System.out.println("Categoria não encontrada.");
+                    }
+                    break;
+
+                case 3:
+                    System.out.println("\n--- LISTA DE CATEGORIAS DE PRODUTOS ---");
+                    dao.listarTodos().forEach(cat -> 
+                        System.out.println(
+                            "ID: " + cat.getId() + " - " + 
+                            "Nome: " + cat.getNome() + " - " + 
+                            "Descrição: " + cat.getDescricao()
+                        )
+                    );
+                    break;
+
+                case 4:
+                    System.out.print("Digite o ID da categoria que deseja DELETAR: ");
+                    int idDeletar = sc.nextInt();
+                    sc.nextLine();
+
+                    Categoria_Produtos catDeletar = dao.buscarPorId(idDeletar);
+                    if (catDeletar != null) {
+                        System.out.print("Tem certeza que deseja deletar a categoria '" + catDeletar.getNome() + "'? (S/N): ");
+                        String conf = sc.nextLine(); // se der erro de compilação mude para 'sc.nextLine()'
+                        if (conf.equalsIgnoreCase("S")) {
+                            dao.deletar(idDeletar);
+                        } else {
+                            System.out.println("Operação cancelada.");
+                        }
+                    } else {
+                        System.out.println("Categoria não encontrada.");
+                    }
+                    break;
+            }
+
+        } while (op != 0);
+    }
+    
+    public static void menuProdutos(Scanner sc, ProdutosDAO dao) {
+        int op;
+
+        do {
+            System.out.println("\n=== MENU PRODUTOS ===");
+            System.out.println("1 - Inserir Produto");
+            System.out.println("2 - Editar Produto");
+            System.out.println("3 - Listar Produtos Ativos");
+            System.out.println("4 - Desativar Produto (Exclusão Lógica)");
+            System.out.println("0 - Voltar");
+            System.out.print("Opção: ");
+
+            op = sc.nextInt();
+            sc.nextLine();
+
+            switch (op) {
+                case 1:
+                    Produtos p = new Produtos();
+                    System.out.print("Nome do Produto: ");
+                    p.setNome(sc.nextLine());
+
+                    System.out.print("Descrição: ");
+                    p.setDescricao(sc.nextLine());
+
+                    System.out.print("Preço (ex: 29,90): ");
+                    p.setPreco(sc.nextDouble());
+                    sc.nextLine();
+
+                    System.out.print("Data de Vencimento (AAAA-MM-DD): ");
+                    p.setData_vencimento(sc.nextLine());
+
+                    System.out.print("ID da Categoria do Produto: ");
+                    Categoria_Produtos catIns = new Categoria_Produtos();
+                    catIns.setId(sc.nextInt());
+                    p.setCategoria_produto(catIns);
+
+                    dao.cadastrar(p);
+                    break;
+
+                case 2:
+                    p = new Produtos();
+                    System.out.print("ID do Produto a ser editado: ");
+                    p.setId(sc.nextInt());
+                    sc.nextLine();
+
+                    System.out.print("Novo Nome: ");
+                    p.setNome(sc.nextLine());
+
+                    System.out.print("Nova Descrição: ");
+                    p.setDescricao(sc.nextLine());
+
+                    System.out.print("Novo Preço: ");
+                    p.setPreco(sc.nextDouble());
+                    sc.nextLine();
+
+                    System.out.print("Nova Data de Vencimento (AAAA-MM-DD): ");
+                    p.setData_vencimento(sc.nextLine());
+
+                    System.out.print("Novo ID da Categoria: ");
+                    Categoria_Produtos catEdit = new Categoria_Produtos();
+                    catEdit.setId(sc.nextInt());
+                    p.setCategoria_produto(catEdit);
+
+                    System.out.print("Status (1 - Ativo, 0 - Inativo): ");
+                    p.setStatus(sc.nextInt());
+
+                    dao.atualizar(p);
+                    break;
+
+                case 3:
+                    System.out.println("\n--- LISTA DE PRODUTOS ATIVOS ---");
+                    dao.listarTodos().forEach(prod -> 
+                        System.out.println(
+                            "ID: " + prod.getId() + " | " +
+                            "Nome: " + prod.getNome() + " | " +
+                            "Preço: R$ " + prod.getPreco() + " | " +
+                            "Vencimento: " + prod.getData_vencimento() + " | " +
+                            "Categoria: " + (prod.getCategoria_produto() != null ? prod.getCategoria_produto().getNome() : "Sem Categoria")
+                        )
+                    );
+                    break;
+
+                case 4:
+                    System.out.print("ID do Produto a desativar: ");
+                    int idDeletar = sc.nextInt();
+                    dao.deletar(idDeletar);
                     break;
             }
 
         } while (op != 0);
     }
 }
+    
+

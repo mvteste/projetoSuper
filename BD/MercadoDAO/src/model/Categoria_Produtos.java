@@ -19,6 +19,10 @@ public class Categoria_Produtos {
         this.nome = nome;
         this.descricao = descricao;
     }
+    
+    public Categoria_Produtos() {
+    
+    }
 
     public int getId() {
         return id;
