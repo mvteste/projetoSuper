@@ -132,9 +132,19 @@ public class TelaInicial extends javax.swing.JFrame {
         jMenu4.setText("Fornecedor");
 
         jMenuItem5.setText("Cadastrar Fornecedor");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
         jMenu4.add(jMenuItem5);
 
         jMenuItem6.setText("Listar Fornecedor");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
         jMenu4.add(jMenuItem6);
 
         jMenuBar1.add(jMenu4);
@@ -206,11 +216,14 @@ public class TelaInicial extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        FornecedorView tela = new FornecedorView();
+        // 1. Cria a tela
+        view.ListarProdutoView telaListar = new view.ListarProdutoView();
 
-        jDesktopPane1.add(tela);
+        // 2. Coloca ela dentro da sua área de trabalho (Ajuste o nome do seu jDesktopPane se for diferente)
+        jDesktopPane1.add(telaListar);
 
-        tela.setVisible(true);
+        // 3. A LINHA MÁGICA QUE REVELA TUDO:
+        telaListar.setVisible(true);
 
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
@@ -229,6 +242,28 @@ public class TelaInicial extends javax.swing.JFrame {
 
         tela.setVisible(true);
     }//GEN-LAST:event_jMenu6ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        // 1. Criamos a "encomenda" (instanciamos o objeto da tela FornecedorView)
+        FornecedorView telaFornecedor = new FornecedorView();
+
+        // 2. Adicionamos a tela interna dentro da nossa Área de Trabalho do menu principal.
+        // ATENÇÃO: Troque "jDesktopPane1" pelo nome que você deu para o DesktopPane no seu Menu Principal!
+        jDesktopPane1.add(telaFornecedor);
+
+        // 3. E o passo mais importante: dizemos para a tela se mostrar!
+        telaFornecedor.setVisible(true);
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        view.ListarFornecedorView telaLista = new view.ListarFornecedorView();
+        jDesktopPane1.add(telaLista);
+
+        // Força a tela a abrir em um bom tamanho
+        telaLista.setSize(600, 400); 
+
+        telaLista.setVisible(true);
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     /**
      * @param args the command line arguments

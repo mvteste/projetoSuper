@@ -13,7 +13,6 @@ public class Fornecedor {
     private int id;
     private String nome;
     private String cnpj;
-    private String telefone;
     private String email;
     private String endereco;
 
@@ -41,10 +40,7 @@ public class Fornecedor {
         this.cnpj = cnpj;
     }
 
-    public String getTelefone() {
-        return telefone;
-    }
-
+    
     public String getEmail() {
         return email;
     }
@@ -53,10 +49,7 @@ public class Fornecedor {
         return endereco;
     }
 
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
-
+  
     public void setEmail(String email) {
         this.email = email;
     }
@@ -65,5 +58,8 @@ public class Fornecedor {
         this.endereco = endereco;
     }
     
-    
+    @Override
+    public String toString() {
+        return this.nome;
+    }
 }

@@ -104,8 +104,41 @@ public class ProdutoDAO implements GenericDAO<Produto> {
     }
     
     @Override 
-    public List<Produto> listarTodos(){
-        System.out.println("Listando Produtos:");
-        return null;
+    public java.util.List<model.Produto> listarTodos() {
+        // AQUI ESTAVA O ERRO: A lista precisa ser inicializada com o ArrayList!
+        java.util.List<model.Produto> lista = new java.util.ArrayList<>();
+        
+        String sql = "SELECT p.*, c.nome AS categoria_nome " +
+                     "FROM produto p " +
+                     "LEFT JOIN categoria c ON p.categoria_id = c.id";
+
+        try (java.sql.Connection conn = connection.Conexao.conectar();
+             java.sql.PreparedStatement stmt = conn.prepareStatement(sql);
+             java.sql.ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                model.Produto p = new model.Produto();
+                p.setId(rs.getInt("id"));
+                p.setNome(rs.getString("nome"));
+                p.setDescricao(rs.getString("descricao"));
+                p.setPreco(rs.getDouble("preco"));
+                p.setDataVencimento(rs.getDate("data_vencimento"));
+
+                // Se o produto tiver uma categoria, preenche o objeto Categoria
+                if (rs.getObject("categoria_id") != null) {
+                    model.Categoria cat = new model.Categoria();
+                    cat.setId(rs.getInt("categoria_id"));
+                    cat.setNome(rs.getString("categoria_nome"));
+                    p.setCategoria(cat);
+                }
+
+                lista.add(p);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        // Garante que vai devolver a lista (mesmo que vazia), e nunca um "null"
+        return lista;
     }
 }
