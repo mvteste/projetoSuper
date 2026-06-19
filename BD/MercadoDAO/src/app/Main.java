@@ -11,6 +11,7 @@ import dao.CaixaDAO;
 import dao.Contas_PagarDAO; 
 import dao.Contas_ReceberDAO;
 import dao.Categoria_ProdutosDAO;
+import dao.EstoqueDAO;
 import dao.ProdutosDAO; // Novo Import
 import java.sql.Connection;
 import java.util.Scanner;
@@ -62,6 +63,7 @@ public class Main {
             System.out.println("10 - Menu Contas a Receber");
             System.out.println("11 - Menu Categorias de Produtos");
             System.out.println("12 - Menu Produtos"); // Nova Opção
+            System.out.println("13 - Menu Estoque");
             System.out.println("0 - Sair");
             System.out.print("Opção: ");
 
@@ -126,6 +128,10 @@ public class Main {
 
                 case 12:
                     menuProdutos(sc, produtoDAO); // Chamada do novo Menu
+                    break;
+                    
+                case 13:
+                    menuEstoque(sc, estoqueDAO);
                     break;
 
                 case 0:
@@ -592,7 +598,7 @@ public class Main {
         } while (op != 0);
     }
 
-    public static void menuPedidoCompra(Scanner sc, Pedido_CompraDAO dao) {
+public static void menuPedidoCompra(Scanner sc, Pedido_CompraDAO dao) {
 
         int op;
 
@@ -613,16 +619,22 @@ public class Main {
                 case 1:
                     Pedido_Compra p = new Pedido_Compra();
                     Fornecedor f = new Fornecedor();
-
-                    System.out.print("Quantidade de Itens: ");
-                    p.setQuantidade(sc.nextInt());
-
-                    System.out.print("Valor Total (ex: 1500,75): ");
-                    p.setTotal(sc.nextDouble());
+                    Produtos prod = new Produtos(); 
 
                     System.out.print("ID do Fornecedor: ");
                     f.setId(sc.nextInt());
                     p.setFornecedor(f);
+
+                    System.out.print("ID do Produto: ");
+                    prod.setId(sc.nextInt());
+                    p.setProdutos(prod); 
+
+                    System.out.print("Quantidade do Produto: ");
+                    p.setQuantidade(sc.nextInt());
+
+                    System.out.print("Valor Total do Pedido (ex: 1500,75): ");
+                    p.setTotal(sc.nextDouble());
+                    sc.nextLine(); // Limpa o buffer do teclado
 
                     dao.inserir(p);
                     break;
@@ -630,20 +642,27 @@ public class Main {
                 case 2:
                     p = new Pedido_Compra();
                     f = new Fornecedor();
+                    prod = new Produtos();
 
                     System.out.print("ID do Pedido a ser editado: ");
                     p.setId(sc.nextInt());
-
-                    System.out.print("Nova Quantidade de Itens: ");
-                    p.setQuantidade(sc.nextInt());
-
-                    System.out.print("Novo Valor Total: ");
-                    p.setTotal(sc.nextDouble());
 
                     System.out.print("Novo ID do Fornecedor: ");
                     f.setId(sc.nextInt());
                     p.setFornecedor(f);
 
+                    System.out.print("Novo ID do Produto: ");
+                    prod.setId(sc.nextInt());
+                    p.setProdutos(prod);
+
+                    System.out.print("Nova Quantidade do Produto: ");
+                    p.setQuantidade(sc.nextInt());
+
+                    System.out.print("Novo Valor Total: ");
+                    p.setTotal(sc.nextDouble());
+                    sc.nextLine(); // Limpa o buffer do teclado
+
+                    // Executa a edição completa do pedido
                     dao.editar(p);
                     break;
 
@@ -652,9 +671,10 @@ public class Main {
                     dao.listar().forEach(pedido -> 
                         System.out.println(
                             "ID Pedido: " + pedido.getId() + " | " + 
-                            "Qtd: " + pedido.getQuantidade() + " | " + 
-                            "Total: R$ " + pedido.getTotal() + " | " + 
-                            "Fornecedor: (" + pedido.getFornecedor().getId() + ") " + pedido.getFornecedor().getNome()
+                            "Fornecedor ID: " + pedido.getFornecedor().getId() + " | " +
+                            "Produto ID: " + pedido.getProdutos().getId() + " | " +
+                            "Qtd: " + pedido.getQuantidade() + " | " +
+                            "Total: R$ " + pedido.getTotal()
                         )
                     );
                     break;
@@ -664,6 +684,7 @@ public class Main {
 
                     System.out.print("ID do Pedido a ser removido: ");
                     p.setId(sc.nextInt());
+                    sc.nextLine(); // Limpa o buffer do teclado
 
                     dao.deletar(p);
                     break;
@@ -1139,6 +1160,49 @@ public class Main {
                     System.out.print("ID do Produto a desativar: ");
                     int idDeletar = sc.nextInt();
                     dao.deletar(idDeletar);
+                    break;
+            }
+
+        } while (op != 0);
+    }
+    
+    public static void menuEstoque(Scanner sc, EstoqueDAO dao) {
+
+        int op;
+
+        do {
+            System.out.println("\n=== MENU CONTROLE DE ESTOQUE ===");
+            System.out.println("1 - Listar Saldo do Estoque");
+            System.out.println("2 - Ajustar Quantidade Manualmente");
+            System.out.println("0 - Voltar");
+            System.out.print("Opção: ");
+
+            op = sc.nextInt();
+            sc.nextLine(); // Limpa o buffer do teclado
+
+            switch (op) {
+
+                case 1:
+                    System.out.println("\n--- SALDO ATUAL DO ESTOQUE ---");
+                    dao.listarTudo().forEach(est -> 
+                        System.out.println(
+                            "ID Estoque: " + est.getId() + " | " +
+                            "ID Produto: " + est.getProdutos().getId() + " | " +
+                            "Quantidade Disponível: " + est.getQuantidade()
+                        )
+                    );
+                    break;
+
+                case 2:
+                    System.out.print("Digite o ID do Produto que deseja ajustar: ");
+                    int idProd = sc.nextInt();
+
+                    System.out.print("Digite a Nova Quantidade exata em estoque: ");
+                    int novaQtd = sc.nextInt();
+                    sc.nextLine(); // Limpa o buffer
+
+                    // Executa o ajuste manual direto no banco
+                    dao.ajustarQuantidadeManual(idProd, novaQtd);
                     break;
             }
 

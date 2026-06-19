@@ -19,6 +19,10 @@ public class Estoque {
         this.quantidade = quantidade;
         this.produtos = produtos;
     }
+    
+    public  Estoque(){
+    
+    }
 
     public int getId() {
         return id;

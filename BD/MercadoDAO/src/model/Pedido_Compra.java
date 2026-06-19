@@ -14,13 +14,17 @@ public class Pedido_Compra {
     private int quantidade;
     private double total;
     private Fornecedor fornecedor;
+    private Produtos produtos;
 
-    public Pedido_Compra(int id, int quantidade, int total, Fornecedor fornecedor) {
+    public Pedido_Compra(int id, int quantidade, double total, Fornecedor fornecedor, Produtos produtos) {
         this.id = id;
         this.quantidade = quantidade;
         this.total = total;
         this.fornecedor = fornecedor;
+        this.produtos = produtos;
     }
+
+    
     
     public Pedido_Compra(){
     
@@ -57,5 +61,15 @@ public class Pedido_Compra {
     public void setFornecedor(Fornecedor fornecedor) {
         this.fornecedor = fornecedor;
     }
+
+    public Produtos getProdutos() {
+        return produtos;
+    }
+
+    public void setProdutos(Produtos produtos) {
+        this.produtos = produtos;
+    }
+
+    
  
 }
