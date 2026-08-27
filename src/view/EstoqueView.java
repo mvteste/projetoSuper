@@ -4,65 +4,70 @@
  */
 package view;
 
-import model.Produto;
-import model.Estoque;
-import dao.ProdutoDAO;
-import dao.EstoqueDAO;
-
 /**
+ * Tela de consulta do estoque.
  *
  * @author GUSTAVOSCALEIMORAES
  */
 public class EstoqueView extends javax.swing.JInternalFrame {
 
     public EstoqueView() {
-        initComponents(); // Desenha a tela
-        
-        // Agora só chamamos o preencherTabela()
-        preencherTabela(); 
-        
-        this.pack();
-        this.revalidate();
-        this.repaint();
+        initComponents();
+        setTitle("Estoque");
+        setClosable(true);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
+        preencherTabela();
     }
 
-    // Método para buscar os produtos e colocar na Caixa de Seleção
-    
-
-    // Método para listar o estoque atual na tabela
+    /**
+     * Carrega todos os produtos e apresenta a quantidade total encontrada na
+     * tabela estoque para cada produto.
+     */
     private void preencherTabela() {
-        // 1. Pega a estrutura da tabela visual e limpa as linhas antigas
-        javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) jTable1.getModel();
-        modelo.setNumRows(0); 
-        
-        // 2. Chama os DAOs para buscar as informações no banco
-        dao.ProdutoDAO daoProduto = new dao.ProdutoDAO(); 
+        preencherTabelaComProdutos(new dao.ProdutoDAO().listarTodos());
+    }
+
+    /**
+     * Preenche a tabela visual com os produtos recebidos e cruza os registros
+     * com o estoque. Caso existam várias entradas de estoque para o mesmo
+     * produto, as quantidades são somadas.
+     */
+    private void preencherTabelaComProdutos(java.util.List<model.Produto> produtos) {
+        javax.swing.table.DefaultTableModel modelo =
+                (javax.swing.table.DefaultTableModel) jTable3.getModel();
+        modelo.setNumRows(0);
+
         dao.EstoqueDAO daoEstoque = new dao.EstoqueDAO();
-        
-        // 3. Pega TUDO do banco de dados e guarda em listas
-        java.util.List<model.Produto> listaProdutos = daoProduto.listarTodos();
         java.util.List<model.Estoque> listaEstoque = daoEstoque.listarTodos();
-        
-        // 4. A mágica acontece aqui: Vamos passar por TODOS os produtos (um por um)
-        for (model.Produto p : listaProdutos) {
-            
-            // Assumimos que o produto está zerado no começo
-            int quantidadeAtual = 0; 
-            
-            // Procuramos se esse produto específico tem algum registro na lista de Estoque
-            for (model.Estoque e : listaEstoque) {
-                // Se o ID do produto bater com o ID que está salvo no estoque...
-                if (e.getProduto().getId() == p.getId()) {
-                    quantidadeAtual = e.getQuantidade(); // Atualizamos a quantidade com o valor real
-                    break; // Achou o que precisava, para de procurar esse produto
+
+        for (model.Produto produto : produtos) {
+            int quantidadeAtual = 0;
+
+            for (model.Estoque estoque : listaEstoque) {
+                if (estoque.getProduto() != null
+                        && estoque.getProduto().getId() == produto.getId()) {
+                    quantidadeAtual += estoque.getQuantidade();
                 }
             }
-            
-            // 5. Adiciona a linha na tabela visual (ID do Produto, Nome do Produto, Quantidade)
-            modelo.addRow(new Object[]{ p.getId(), p.getNome(), quantidadeAtual });
+
+            String categoria = "Sem categoria";
+            if (produto.getCategoria() != null
+                    && produto.getCategoria().getNome() != null) {
+                categoria = produto.getCategoria().getNome();
+            }
+
+            modelo.addRow(new Object[]{
+                produto.getId(),
+                produto.getNome(),
+                produto.getPreco(),
+                categoria,
+                quantidadeAtual
+            });
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -84,7 +89,23 @@ public class EstoqueView extends javax.swing.JInternalFrame {
             new String [] {
                 "ID", "Produto", "Preço", "Categoria", "Quantidade"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTable3.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane4.setViewportView(jTable3);
 
         jButton3.setText("Pesquisar");
@@ -158,59 +179,26 @@ public class EstoqueView extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        String busca = jTextField1.getText();
-        
-        // Buscamos os produtos filtrados pelo nome
+        String busca = jTextField3.getText().trim();
+
         dao.ProdutoDAO daoProduto = new dao.ProdutoDAO();
         java.util.List<model.Produto> listaFiltrada = daoProduto.buscarPorNome(busca);
-        
-        // Como o preencherTabela() atual precisa saber dos estoques, 
-        // vamos atualizar a lógica para filtrar também no estoque ou recarregar tudo.
-        // Se quiser apenas filtrar a tabela, o mais simples é:
-        javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) jTable1.getModel();
-        modelo.setNumRows(0);
-        
-        dao.EstoqueDAO daoEstoque = new dao.EstoqueDAO();
-        java.util.List<model.Estoque> listaEstoque = daoEstoque.listarTodos();
 
-        for (model.Produto p : listaFiltrada) {
-            int qtd = 0;
-            for (model.Estoque e : listaEstoque) {
-                if (e.getProduto().getId() == p.getId()) {
-                    qtd = e.getQuantidade();
-                    break;
-                }
-            }
-            modelo.addRow(new Object[]{ p.getId(), p.getNome(), qtd });
-        }
+        preencherTabelaComProdutos(listaFiltrada);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        jTextField1.setText("");
-        // Chama o método que já criamos anteriormente e que faz tudo certo
+        jTextField3.setText("");
         preencherTabela();
     }//GEN-LAST:event_jButton4ActionPerformed
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable3;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     // End of variables declaration//GEN-END:variables
 }

@@ -15,12 +15,13 @@ public class ListarClienteView extends javax.swing.JInternalFrame {
      */
     public ListarClienteView() {
         initComponents();
+        preencherTabela(new dao.ClienteDAO().listarTodos());
     }
 
     private void preencherTabela(java.util.List<model.Cliente> lista) {
         javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) jTable1.getModel();
-        modelo.setNumRows(0); 
-        
+        modelo.setNumRows(0);
+
         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");
 
         for (model.Cliente c : lista) {
@@ -29,26 +30,26 @@ public class ListarClienteView extends javax.swing.JInternalFrame {
                 dataFormatada = sdf.format(c.getData_Nascimento());
             }
 
-            // --- INÍCIO DA FORMATAÇÃO DO CPF ---
             String cpfFormatado = c.getCpf();
-            
-            // Só tenta formatar se o CPF não for vazio e tiver exatamente 11 números
-            if (cpfFormatado != null && cpfFormatado.length() == 11) {
-                cpfFormatado = cpfFormatado.substring(0, 3) + "." + 
-                               cpfFormatado.substring(3, 6) + "." + 
-                               cpfFormatado.substring(6, 9) + "-" + 
-                               cpfFormatado.substring(9, 11);
+            if (cpfFormatado != null) {
+                String apenasNumeros = cpfFormatado.replaceAll("\\D", "");
+                if (apenasNumeros.length() == 11) {
+                    cpfFormatado = apenasNumeros.substring(0, 3) + "."
+                            + apenasNumeros.substring(3, 6) + "."
+                            + apenasNumeros.substring(6, 9) + "-"
+                            + apenasNumeros.substring(9, 11);
+                }
             }
-            // -----------------------------------
 
             modelo.addRow(new Object[]{
-                c.getId(), 
+                c.getId(),
                 c.getNome(),
                 dataFormatada,
-                cpfFormatado // <-- Trocamos c.getCpf() pela variável formatada aqui!
+                cpfFormatado
             });
         }
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -129,54 +130,80 @@ public class ListarClienteView extends javax.swing.JInternalFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         int linhaSelecionada = jTable1.getSelectedRow();
-        
+
         if (linhaSelecionada == -1) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Selecione um cliente na tabela para excluir!");
+            javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    "Selecione um cliente na tabela para excluir!"
+            );
             return;
         }
-        
-        int confirmacao = javax.swing.JOptionPane.showConfirmDialog(
-            this,
-            "Tem certeza que deseja excluir este cliente do banco de dados?",
-            "Confirmar exclusão",
-            javax.swing.JOptionPane.YES_NO_OPTION);
 
-        if (confirmacao == javax.swing.JOptionPane.YES_OPTION) {
-            // Pega o ID do cliente que está na primeira coluna (índice 0) da linha selecionada
-            int idCliente = (int) jTable1.getValueAt(linhaSelecionada, 0);
-            
-            // Chama o DAO para excluir de verdade do MySQL
-            dao.ClienteDAO dao = new dao.ClienteDAO();
-            dao.excluir(idCliente); // ATENÇÃO: Você precisa criar esse método no DAO!
-            
-            // Atualiza a tabela mostrando que o cliente sumiu
-            preencherTabela(dao.listarTodos());
-            
-            javax.swing.JOptionPane.showMessageDialog(this, "Cliente excluído com sucesso!");
+        int confirmacao = javax.swing.JOptionPane.showConfirmDialog(
+                this,
+                "Tem certeza que deseja excluir este cliente do banco de dados?",
+                "Confirmar exclusão",
+                javax.swing.JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirmacao != javax.swing.JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        int idCliente = ((Number) jTable1.getValueAt(linhaSelecionada, 0)).intValue();
+        dao.ClienteDAO dao = new dao.ClienteDAO();
+
+        try {
+            boolean excluido = dao.excluirCliente(idCliente);
+
+            if (excluido) {
+                preencherTabela(dao.listarTodos());
+                javax.swing.JOptionPane.showMessageDialog(
+                        this,
+                        "Cliente excluído com sucesso!"
+                );
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(
+                        this,
+                        "O cliente não foi encontrado. Atualize a lista e tente novamente.",
+                        "Cliente não encontrado",
+                        javax.swing.JOptionPane.WARNING_MESSAGE
+                );
+            }
+
+        } catch (java.sql.SQLIntegrityConstraintViolationException e) {
+            javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    "Este cliente possui vendas ou outros registros vinculados e não pode ser excluído.\n"
+                    + "O bloqueio preserva o histórico do sistema.",
+                    "Cliente possui registros vinculados",
+                    javax.swing.JOptionPane.WARNING_MESSAGE
+            );
+        } catch (java.sql.SQLException e) {
+            javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    "Não foi possível excluir o cliente.\nDetalhes: " + e.getMessage(),
+                    "Erro ao excluir",
+                    javax.swing.JOptionPane.ERROR_MESSAGE
+            );
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        String textoPesquisa = jTextField1.getText();
-        
-        // Agora quem faz a busca inteligente é o Banco de Dados, não mais o 'for' do Java!
+        String textoPesquisa = jTextField1.getText().trim();
+
         dao.ClienteDAO dao = new dao.ClienteDAO();
         java.util.List<model.Cliente> lista = dao.buscarPorNome(textoPesquisa);
-        
+
         preencherTabela(lista);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        jTextField1.setText(""); // Limpa a caixa de texto
-        
-        // Busca todos do banco novamente
+        jTextField1.setText("");
+
         dao.ClienteDAO dao = new dao.ClienteDAO();
         preencherTabela(dao.listarTodos());
-                                                
-
-  
     }//GEN-LAST:event_jButton3ActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -186,6 +213,4 @@ public class ListarClienteView extends javax.swing.JInternalFrame {
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
-
-
 }
