@@ -1,0 +1,93 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package model;
+
+/**
+ *
+ * @author Emanuel
+ */
+public class Produtos {
+    
+    private int id;
+    private String nome;
+    private String descricao;
+    private double preco;
+    private String data_vencimento;
+    private Categoria_Produtos categoria_produto;
+    private int status;
+
+    public Produtos(int id, String nome, String descricao, double preco, String data_vencimento, Categoria_Produtos categoria_produto, int status) {
+        this.id = id;
+        this.nome = nome;
+        this.descricao = descricao;
+        this.preco = preco;
+        this.data_vencimento = data_vencimento;
+        this.categoria_produto = categoria_produto;
+        this.status = status;
+    }
+    
+    public Produtos(){
+    
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public double getPreco() {
+        return preco;
+    }
+
+    public void setPreco(double preco) {
+        this.preco = preco;
+    }
+
+    public String getData_vencimento() {
+        return data_vencimento;
+    }
+
+    public void setData_vencimento(String data_vencimento) {
+        this.data_vencimento = data_vencimento;
+    }
+
+    public Categoria_Produtos getCategoria_produto() {
+        return categoria_produto;
+    }
+
+    public void setCategoria_produto(Categoria_Produtos categoria_produto) {
+        this.categoria_produto = categoria_produto;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+   
+    
+}
