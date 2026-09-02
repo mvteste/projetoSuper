@@ -14,7 +14,11 @@ import dao.Categoria_ProdutosDAO;
 import dao.EstoqueDAO;
 import dao.ProdutosDAO; // Novo Import
 import java.sql.Connection;
+import java.awt.EventQueue;
+import java.util.Arrays;
 import java.util.Scanner;
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import model.Clientes;
 import model.Fornecedor;
 import model.Funcionarios;
@@ -27,10 +31,35 @@ import model.Contas_Receber;
 import model.Vendas;
 import model.Categoria_Produtos;
 import model.Produtos; // Novo Import
+import view.SistemaView;
 
 public class Main {
 
     public static void main(String[] args) {
+
+        if (Arrays.asList(args).contains("--console")) {
+            ConsoleApp.executar();
+            return;
+        }
+
+        EventQueue.invokeLater(() -> {
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                new SistemaView().setVisible(true);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null,
+                        "Não foi possível iniciar a interface gráfica.\n" + e.getMessage(),
+                        "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+    }
+}
+
+class ConsoleApp {
+    private ConsoleApp() {
+    }
+
+    static void executar() {
 
         Scanner sc = new Scanner(System.in);
 
@@ -45,6 +74,7 @@ public class Main {
         Contas_ReceberDAO contasReceberDAO = new Contas_ReceberDAO();
         Categoria_ProdutosDAO categoriaDAO = new Categoria_ProdutosDAO();
         ProdutosDAO produtoDAO = new ProdutosDAO(); // Novo DAO
+        EstoqueDAO estoqueDAO = new EstoqueDAO();
 
         int op;
 
@@ -1210,4 +1240,3 @@ public static void menuPedidoCompra(Scanner sc, Pedido_CompraDAO dao) {
     }
 }
     
-
